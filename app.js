@@ -1,13 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const app = express();
+const Book = require('./models/Book');
 
 mongoose.connect('mongodb+srv://gbourgeron:zEEqGZBKC6L4FoxR@cluster0.fyf4qd8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-  { useNewUrlParser: true,
+{ useNewUrlParser: true,
     useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
+    
+const app = express();
 
 app.use(express.json());
 
@@ -19,11 +21,14 @@ app.use((req, res, next) => {
 });
 
 app.post('/api/books', (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message: 'Livre créé'
+    delete req.body._id;
+    const book = new Book({
+        ...req.body
     });
-})
+    thing.save()
+        .then(() => res.status(201).json({ message: 'Livre enregistré.'}))
+        .catch(error => res.status(400).json({ error }));
+});
 
 app.get('/api/books', (req, res, next) => {
     const book = [
