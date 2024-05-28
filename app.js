@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const bookRoutes = require('./routes/book');
+const userRoutes = require('./routes/user');
 
 mongoose.connect('mongodb+srv://gbourgeron:<PASSWORD>@cluster0.fyf4qd8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
 { useNewUrlParser: true,
@@ -21,5 +22,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/books', bookRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
