@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/gbourgeron/vieux-grimoire-p7-oc#readme",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0"
   }
 }
