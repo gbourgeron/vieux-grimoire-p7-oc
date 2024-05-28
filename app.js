@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Book = require('./models/Book');
 
-mongoose.connect('mongodb+srv://gbourgeron:zEEqGZBKC6L4FoxR@cluster0.fyf4qd8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+mongoose.connect('mongodb+srv://gbourgeron:<PASSWORD>@cluster0.fyf4qd8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
 { useNewUrlParser: true,
     useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
