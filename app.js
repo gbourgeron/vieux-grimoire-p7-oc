@@ -31,41 +31,9 @@ app.post('/api/books', (req, res, next) => {
 });
 
 app.get('/api/books', (req, res, next) => {
-    const book = [
-        {
-            _id: 'oeihfzeoi',
-            title: 'Star Wars Episode IV: A New Hope',
-            author: 'George Lucas',
-            imageUrl: 'https://upload.wikimedia.org/wikipedia/en/b/bc/StarWarsNovelization.jpg',
-            year: 1976,
-            genre: 'Science-Fiction',
-            ratings: [
-                {
-                    userId: 'gsomihvgios',
-                    grade: 4,
-                }
-            ],
-            averageRating: 4,
-            userId: 'gsomihvgios',
-        },
-        {
-            _id: 'oeihfzeomoihi',
-            title: 'Star Wars Episode V: The Empire Strikes Back',
-            author: 'George Lucas',
-            imageUrl: 'https://upload.wikimedia.org/wikipedia/en/8/80/Episodev_empirestrikesback.jpg',
-            year: 1980,
-            genre: 'Science-Fiction',
-            ratings: [
-                {
-                    userId: 'gsomihvgios',
-                    grade: 5,
-                }
-            ],
-            averageRating: 5,
-            userId: 'gsomihvgios',
-        },
-    ];
-    res.status(200).json(book);
+    Book.find()
+        .then(books => res.status(200).json(books))
+        .catch(error => res.status(400).json({ error }));
 });
 
 module.exports = app;
