@@ -39,10 +39,6 @@ exports.modifyBook = (req, res, next) => {
 };
 
 exports.deleteBook = (req, res, next) => {
-    // Book.deleteOne({ _id: req.params.id })
-    //     .then(() => res.status(200).json({ message: 'Livre supprimé.'}))
-    //     .catch(error => res.status(400).json({ error }));
-
     Book.findOne({ _id: req.params.id})
         .then(book => {
             if (book.userId != req.auth.userId) {
@@ -72,3 +68,9 @@ exports.getAllBooks = (req, res, next) => {
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({ error }));
 };
+
+exports.getThreeBestRatedBooks = (req, res, next) => {
+    Book.find().sort({ averageRating: -1}).limit(3)
+        .then(books => res.status(200).json(books))
+        .catch(error => res.status(400).json({ error }));
+}
