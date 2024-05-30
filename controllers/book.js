@@ -75,6 +75,41 @@ exports.getThreeBestRatedBooks = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 }
 
+// exports.rateBook = (req, res, next) => {
+//     const { userId, rating } = req.body;
+
+//     const tokenUserId = req.auth.userId;
+    
+//     console.log(userId);
+//     console.log(tokenUserId);
+
+//     if (tokenUserId !== userId) {
+//         return res.status(401).json({ message: 'Non autorisé.' });
+//     }
+
+//     Book.findOne({ _id: req.params.id })
+//         .then(book => {
+//             const existingRating = book.ratings.find(rating => rating.userId === userId);
+//             if (existingRating) {
+//                 return res.status(400).json({ message: 'Vous avez déjà noté ce livre.' });
+//             } else {
+//                 book.ratings.push({ userId, grade: rating }); // Utilisation de grade pour la base de données
+
+//                 const totalRatings = book.ratings.length;
+//                 const sumRatings = book.ratings.reduce((sum, rating) => sum + rating.grade, 0);
+//                 book.averageRating = sumRatings / totalRatings;
+
+//                 console.log("Book before saving:", book); // Vérification du contenu du livre avant sauvegarde
+
+//                 book.save()
+//                     .then(() => res.status(200).json({ message: 'Note ajoutée avec succès.', book, id: book._id }))
+//                     .catch(error => res.status(400).json({ error }));
+//                     console.log(book._id);
+//             }
+//         })
+//         .catch(error => res.status(500).json({ error }));
+// };
+
 exports.rateBook = (req, res, next) => {
     const { userId, rating } = req.body;
 
@@ -90,18 +125,27 @@ exports.rateBook = (req, res, next) => {
             if (existingRating) {
                 return res.status(400).json({ message: 'Vous avez déjà noté ce livre.' });
             } else {
-                book.ratings.push({ userId, grade: rating }); // Utilisation de grade pour la base de données
+                book.ratings.push({ userId, grade: rating });
 
                 const totalRatings = book.ratings.length;
                 const sumRatings = book.ratings.reduce((sum, rating) => sum + rating.grade, 0);
                 book.averageRating = sumRatings / totalRatings;
 
-                console.log("Book before saving:", book); // Vérification du contenu du livre avant sauvegarde
-
                 book.save()
-                    .then(() => res.status(200).json({ message: 'Note ajoutée avec succès.', book }))
-                    .catch(error => res.status(400).json({ error }));
+                    .then(savedBook => {
+                        const bookId = savedBook._id.toString();
+                        res.status(200).json({ 
+                            message: 'Note ajoutée avec succès.', 
+                            book: savedBook, 
+                            _id: bookId 
+                        });
+                    })
+                    .catch(error => {
+                        res.status(400).json({ error });
+                    });
             }
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => {
+            res.status(500).json({ error });
+        });
 };
