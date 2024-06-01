@@ -1,20 +1,15 @@
 const multer = require('multer');
 
-const MIME_TYPES = {
-    'image/jpg': 'jpg',
-    'image/jpeg': 'jpg',
-    'image/png': 'png'
+const uploadImage = (req, res, next) => {
+    const upload = multer({ storage: multer.memoryStorage() }).single('image');
+    upload(req, res, (err) => {
+        if (err) {
+            console.error('Erreur lors de l\'upload de l\'image :', err);
+            return res.status(500).json({ error: 'Erreur lors de l\'upload de l\'image' });
+        }
+        console.log('Image uploadée avec succès');
+        next();
+    });
 };
 
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, 'images')
-    },
-    filename: (req, file, callback) => {
-        const name = file.originalname.split(' ').join('_');
-        const extension = MIME_TYPES[file.mimetype];
-        callback(null, name + Date.now() + '.' + extension);
-    }
-});
-
-module.exports = multer({ storage }).single('image');
+module.exports = uploadImage;
